@@ -21,7 +21,9 @@ jobs:
               with:
                 path: vendor
                 key: ${{ hashFiles('composer.lock') }}
+            - name: Docker build
+              run: docker-compose build
             - name: Composer install
-              run: docker-compose run composer install
+              run: docker-compose run app composer install
             - name: Run
-              run: docker-compose run ./application.php app:get-best-theme-team
+              run: docker-compose run app ./application.php app:get-best-theme-team
