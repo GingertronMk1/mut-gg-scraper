@@ -58,7 +58,7 @@ class GetBestThemeTeam extends Command
     $result = [];
     $client = HttpClient::create();
     $baseUrl = 'https://www.mut.gg/theme-teams/hybrid';
-    $fp = fopen(__DIR__ . '/files/result.csv', 'w');
+    $fp = fopen(__DIR__ . '/../files/result.csv', 'w');
     fputcsv($fp, ["Team 1", "Team 2", "Team 3", "Overall"]);
     foreach ($progressBar->iterate($this->getAllCombinationOfThree()) as $combo) {
       $implodedCombo = implode(',', $combo);
