@@ -27,3 +27,8 @@ jobs:
               run: docker-compose run app composer install
             - name: Run
               run: docker-compose run app ./application.php app:get-best-theme-team
+            - name: Archive artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: get-best-theme-team
+                path: ./files
