@@ -21,5 +21,7 @@ jobs:
               with:
                 path: vendor
                 key: ${{ hashFiles('composer.lock') }}
-            - name: Coverage
+            - name: Composer install
+              run: composer install
+            - name: Run
               run: ./application.php app:get-best-theme-team
