@@ -22,4 +22,4 @@ jobs:
                 path: vendor
                 key: ${{ hashFiles('composer.lock') }}
             - name: Coverage
-              run: php bin/console app:get-best-theme-team
+              run: ./application.php app:get-best-theme-team
