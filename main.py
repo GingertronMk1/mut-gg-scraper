@@ -3,6 +3,7 @@ import multiprocessing
 import itertools
 import requests
 from lxml import etree
+import csv
 
 allTeams: list[str] = [
     'arizona-cardinals',
@@ -41,22 +42,32 @@ allTeams: list[str] = [
 
 teams = itertools.combinations(allTeams, 3)
 
-def get_team_from_mut_gg(team1: str, team2: str, team3: str) -> float:
+def get_team_from_mut_gg(teams: list[str]) -> float:
+  team_str = ','.join(teams)
   hybrid_url = 'https://mut.gg/theme-teams/hybrid'
-  request_response = requests.get(hybrid_url, params={'teams': f"{team1},{team2},{team3}"})
+  request_response = requests.get(hybrid_url, params={'teams': team_str})
   response_content = request_response.content
   tree = etree.HTML(response_content)
   r = tree.xpath('//h3[text()="Overall Ratings"]')
   rating = r[0].getnext().xpath('//div[contains(@class, "text-end")]')
   rating_text = rating[0].text
-  print(f"{team1}-{team2}-{team3}: {rating_text}")
-  return rating_text
+  print(f"{team_str} done!")
+  return {
+    'teams': team_str,
+    'rating': rating_text
+  }
 
 
 with multiprocessing.Pool() as pool:
     combos_dict = {}
-    for team_set in pool.starmap(
+    for team_set in pool.map(
         get_team_from_mut_gg, teams
     ):
-      combos_dict[str(teams)]
-      print(get_team_from_mut_gg(team_set))
+        combos_dict[team_set.get('teams', '')] = team_set.get('rating', '')
+    sorted_combos_dict = dict(sorted(combos_dict.items(), key=lambda kv: (kv[1], kv[0])))
+    with open('./files/combos.csv', 'w') as csvfile:
+        spamwriter = csv.writer(csvfile)
+        spamwriter.writerow(['Teams', 'Rating'])
+        for teams, rating in sorted_combos_dict.items():
+            spamwriter.writerow([teams, rating])
+    

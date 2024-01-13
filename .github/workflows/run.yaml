@@ -16,8 +16,8 @@ jobs:
     testing:
         runs-on: ubuntu-latest
         steps:
-            - name: Into the python dir
-              run: cd python
+            - name: Checkout
+              uses: actions/checkout@v3
             - name: Run
               run: ./bin/run
             - name: Archive artifacts

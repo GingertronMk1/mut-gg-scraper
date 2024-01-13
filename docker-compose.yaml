@@ -7,5 +7,4 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes:
-      - "./:/var/www:delegated"
-    working_dir: "/var/www"
+      - "./:/app:delegated"
