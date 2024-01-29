@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import multiprocessing
-import itertools
 import requests
 from lxml import etree
 import csv
@@ -55,9 +54,9 @@ def get_team_from_mut_gg(teams: tuple[str, str, str]) -> float:
   rating_text = rating[0].text
   print(f"{team_str} done!")
   return {
-    'team1': team1.replace('-', ' ').title(),
-    'team2': team2.replace('-', ' ').title(),
-    'team3': team3.replace('-', ' ').title(),
+    'team1': ' '.join(s.capitalize() for s in team1.split('-')),
+    'team2': ' '.join(s.capitalize() for s in team2.split('-')),
+    'team3': ' '.join(s.capitalize() for s in team3.split('-')),
     'rating': rating_text
   }
 
