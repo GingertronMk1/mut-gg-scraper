@@ -21,7 +21,7 @@ jobs:
             - name: Build
               run: ./bin/build
             - name: Run
-              run: ./bin/run
+              run: ./bin/run-and-view
             - name: Archive artifacts
               uses: actions/upload-artifact@v3
               with:

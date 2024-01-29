@@ -55,25 +55,27 @@ def get_team_from_mut_gg(teams: tuple[str, str, str]) -> float:
   rating_text = rating[0].text
   print(f"{team_str} done!")
   return {
-    'teams': team_str,
+    'team1': team1.replace('-', ' ').title(),
+    'team2': team2.replace('-', ' ').title(),
+    'team3': team3.replace('-', ' ').title(),
     'rating': rating_text
   }
 
 
 def main(allTeams: list[str]):
   teams = [(seahawks, eagles, team) for team in allTeams]
-  combos_dict = {}
+  combos = []
   with multiprocessing.Pool() as pool:
       for team_set in pool.map(
           get_team_from_mut_gg, teams
       ):
-          combos_dict[team_set.get('teams', '')] = team_set.get('rating', '')
-  sorted_combos_dict = dict(sorted(combos_dict.items(), key=lambda kv: (kv[1], kv[0])))
+          combos.append(team_set)
+  sorted_combos = sorted(combos, key=lambda kv: (kv.get('rating')), reverse=True)
   with open('./files/combos.csv', 'w') as csvfile:
       spamwriter = csv.writer(csvfile)
-      spamwriter.writerow(['Teams', 'Rating'])
-      for teams, rating in sorted_combos_dict.items():
-          spamwriter.writerow([teams, rating])
+      spamwriter.writerow(['Team 1', 'Team 2', 'Team 3', 'Rating'])
+      for combo in sorted_combos:
+          spamwriter.writerow([combo.get('team1'), combo.get('team2'), combo.get('team3'), combo.get('rating')])
     
 if __name__ == "__main__":
   main(allTeams)
