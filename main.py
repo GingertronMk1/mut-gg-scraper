@@ -5,6 +5,9 @@ import requests
 from lxml import etree
 import csv
 
+seahawks: str = 'seattle-seahawks'
+eagles: str = 'philadelphia-eagles'
+
 allTeams: list[str] = [
     'arizona-cardinals',
     'atlanta-falcons',
@@ -31,18 +34,18 @@ allTeams: list[str] = [
     'new-orleans-saints',
     'new-york-giants',
     'new-york-jets',
-    'philadelphia-eagles',
     'pittsburgh-steelers',
     'san-francisco-49ers',
-    'seattle-seahawks',
     'tampa-bay-buccaneers',
     'tennessee-titans',
     'washington-commanders'
 ]
 
 
-def get_team_from_mut_gg(teams: list[str]) -> float:
-  team_str = ','.join(teams)
+def get_team_from_mut_gg(teams: tuple[str, str, str]) -> float:
+  (team1, team2, team3) = teams
+  team_str = f"{team1},{team2},{team3}"
+  print(f"looking at {team_str}")
   hybrid_url = 'https://mut.gg/theme-teams/hybrid'
   request_response = requests.get(hybrid_url, params={'teams': team_str})
   response_content = request_response.content
@@ -58,7 +61,7 @@ def get_team_from_mut_gg(teams: list[str]) -> float:
 
 
 def main(allTeams: list[str]):
-  teams = itertools.combinations(allTeams, 3)
+  teams = [(seahawks, eagles, team) for team in allTeams]
   combos_dict = {}
   with multiprocessing.Pool() as pool:
       for team_set in pool.map(

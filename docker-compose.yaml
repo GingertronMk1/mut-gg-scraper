@@ -8,3 +8,4 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - "./:/app:delegated"
+    command: tail -f /dev/null
